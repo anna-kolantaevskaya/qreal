@@ -440,60 +440,61 @@ void EditorViewScene::createElement(const QMimeData *mimeData, QPointF const &sc
 
 	Id id = Id::loadFromString(uuid);
 
+	Element *newParent = NULL;
+	Element *e = NULL;
+
+	if (searchForParents) {
+		// if element is node then we should look for parent for him
+		if(mMVIface->graphicalAssistApi()->editorManager().getPatternNames().contains(id.element())
+				|| dynamic_cast<NodeElement*>(mWindow->manager()->graphicalObject(id)))
+			{ // check if e is node
+			foreach (QGraphicsItem *item, items(scenePos)) {
+				NodeElement *el = dynamic_cast<NodeElement*>(item);
+				if (el && canBeContainedBy(el->id(), id)) {
+					newParent = el;
+					break;
+				}
+			}
+		}
+
+		if(newParent && dynamic_cast<NodeElement*>(newParent)){
+			if (!canBeContainedBy(newParent->id(), id)) {
+				QString text;
+				text += "Element of type \"" + id.element() + "\" can not be a child of \"" + newParent->id().element() + "\"";
+				QMessageBox::critical(0, "Error!", text);
+				return;
+			}
+
+			//temporary solution for chaotic changes of coordinates of created elements with edge menu
+			if (dynamic_cast<EdgeElement*>(newParent)) {
+				newParent = NULL;
+			}
+		}
+	}
+	QPointF const position = !newParent ? scenePos
+										: newParent->mapToItem(newParent, newParent->mapFromScene(scenePos));
+
+	Id parentId = newParent ? newParent->id() : mMVIface->rootId();
+
+
 	if(mMVIface->graphicalAssistApi()->editorManager().getPatternNames().contains(id.element())){
-		createGroupOfElements(id, scenePos, mMVIface->rootId(), isFromLogicalModel);
+		createGroupOfElements(id, position, parentId, isFromLogicalModel);
 	}
 	else {
-		Element *newParent = NULL;
-		Element *e = NULL;
-
-		if (searchForParents) {
-			// if element is node then we should look for parent for him
-			e = mWindow->manager()->graphicalObject(id);
-			if (dynamic_cast<NodeElement*>(e)) { // check if e is node
-				foreach (QGraphicsItem *item, items(scenePos)) {
-					NodeElement *el = dynamic_cast<NodeElement*>(item);
-					if (el && canBeContainedBy(el->id(), id)) {
-						newParent = el;
-						break;
-					}
-				}
-			}
-
-			if(newParent && dynamic_cast<NodeElement*>(newParent)){
-				if (!canBeContainedBy(newParent->id(), id)) {
-					QString text;
-					text += "Element of type \"" + id.element() + "\" can not be a child of \"" + newParent->id().element() + "\"";
-					QMessageBox::critical(0, "Error!", text);
-					return;
-				}
-
-				//temporary solution for chaotic changes of coordinates of created elements with edge menu
-				if (dynamic_cast<EdgeElement*>(newParent)) {
-					newParent = NULL;
-				}
-			}
-
-		}
-		QPointF const position = !newParent ? scenePos
-											: newParent->mapToItem(newParent, newParent->mapFromScene(scenePos));
-
-		Id parentId = newParent ? newParent->id() : mMVIface->rootId();
-
+		e = mWindow->manager()->graphicalObject(id);
 		createSingleElement(id, name, e, position, parentId, isFromLogicalModel);
-
-		NodeElement *parentNode = dynamic_cast<NodeElement*>(newParent);
-		if (parentNode != NULL) {
-			Element *nextNode = parentNode->getPlaceholderNextElement();
-			if (nextNode != NULL) {
-				mMVIface->graphicalAssistApi()->stackBefore(id, nextNode->id());
-			}
-		}
-		if (e) {
-			delete e;
-		}
 	}
 
+	NodeElement *parentNode = dynamic_cast<NodeElement*>(newParent);
+	if (parentNode != NULL) {
+		Element *nextNode = parentNode->getPlaceholderNextElement();
+		if (nextNode != NULL) {
+			mMVIface->graphicalAssistApi()->stackBefore(id, nextNode->id());
+		}
+	}
+	if (e) {
+		delete e;
+	}
 	emit elementCreated(id);
 }
 

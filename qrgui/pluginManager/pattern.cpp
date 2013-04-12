@@ -17,6 +17,7 @@ GroupEdge::GroupEdge(QString const &type, QString const &from, QString const &to
 	this->type = type;
 	this->from = from;
 	this->to = to;
+
 }
 
 Pattern::Pattern()
