@@ -5,12 +5,25 @@
 		<nonGraphicTypes>
 			<groups>
 				<group name = "atom1" inNode = "start" outNode = "end">
-					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0"> </groupNode>
-					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100"> </groupNode>
-					<groupEdge type = "DragonFlow" from = "start" to = "end"> </groupEdge>
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "1" parametrized = "false"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100" quan = "1" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" from = "start" to = "end" connectionType = "oneToOne"> </groupEdge>
+				</group>
+				<group name = "atom1_1" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "1" parametrized = "false"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100" quan = "1" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" from = "start" to = "end" connectionType = "oneToOne"> 
+						<point pointX = "100" pointY = "0"> </point>
+						<point pointX = "100" pointY = "100"> </point>
+					</groupEdge>
 				</group>
 				<group name = "atom2" inNode = "all" outNode = "all">
-					<groupNode type = "DragonActionNode" name = "all" xPosition = "0" yPosition = "0"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "all" xPosition = "0" yPosition = "0" quan = "1" parametrized = "false"> </groupNode>
+				</group>
+				<group name = "atom3" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100" quan = "2" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" from = "start" to = "end" connectionType = "manyToMany"> </groupEdge>
 				</group>
 			</groups>
 		</nonGraphicTypes>

@@ -9,20 +9,26 @@ namespace qReal {
 class EditorManager;
 class GroupNode{
 public:
-	GroupNode(QString const &type, QString const &id, QPointF const &position);
+	 GroupNode(QString const &type, QString const &id, const QPointF &position
+			  , int quan, bool parametr);
 
 	QString type;
 	QString id;
 	QPointF position;
+	int quan;
+	bool parametr;
 };
 
 class GroupEdge{
 public:
-	GroupEdge(QString const &type, QString const &from, QString const &to);
+	GroupEdge(QString const &type, QString const &from, QString const &to
+			  , const QString &connectionType, QList<QPoint> points);
 
 	QString type;
 	QString from;
 	QString to;
+	QString connectionType;
+	QList<QPoint> points;
 };
 
 class Pattern{
@@ -35,8 +41,10 @@ public:
 	QString editor() const;
 	void setDiagram(QString const &diagram);
 	QString diagram();
-	void addNode(QString const &type, QString const &id, QPointF const &pos);
-	void addEdge(QString const &type, QString const &from, QString const &to);
+	void addNode(QString const &type, QString const &id, QPointF const &pos
+				 , int quan, bool parametr);
+	void addEdge(QString const &type, QString const &from, QString const &to
+				 , const QString &connectionType, QList<QPoint> points);
 	QList<GroupNode> nodes() const;
 	QList<GroupEdge> edges() const;
 	void setInNode(QString const &id);

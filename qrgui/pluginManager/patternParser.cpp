@@ -4,7 +4,6 @@
 
 #include "patternParser.h"
 #include "../../qrkernel/ids.h"
-#include "editorManager.h"
 #include "pattern.h"
 
 using namespace qReal;
@@ -20,9 +19,8 @@ void PatternParser::loadXml(QString const &xml)
 	mXml.replace("\\n", "\n");
 }
 
-void PatternParser::parseGroups(EditorManager * editorManager, QString const &editor, QString const &diagram)
+void PatternParser::parseGroups(EditorManager *editorManager, QString const &editor, QString const &diagram)
 {
-
 	QDomDocument doc;
 	if (mXml.isNull()){
 		qDebug() << "ERROR: no xml-file to parse";
@@ -65,7 +63,6 @@ void PatternParser::parseGroup(QDomElement const &group)
 	}
 	pattern.countSize(mEditorManager);
 	mPatterns.operator +=(pattern);
-
 }
 
 void PatternParser::parseNode(QDomElement const &node, Pattern &pattern)
@@ -73,10 +70,20 @@ void PatternParser::parseNode(QDomElement const &node, Pattern &pattern)
 	float x = node.attribute("xPosition").toFloat();
 	float y = node.attribute("yPosition").toFloat();
 	QPointF const pos = QPointF(x,y);
-	pattern.addNode(node.attribute("type"), node.attribute("name"), pos);
+	int quan = node.attribute("quan").toInt();
+	bool parametr = (node.attribute("parametrized") == "true") ? true : false;
+	pattern.addNode(node.attribute("type"), node.attribute("name"), pos
+					, quan, parametr);
 }
 
 void PatternParser::parseEdge(QDomElement const &edge, Pattern &pattern)
 {
-	pattern.addEdge(edge.attribute("type"), edge.attribute("from"), edge.attribute("to"));
+	QList<QPoint> points;
+	for (QDomElement point = edge.firstChildElement("point"); !point.isNull();
+		 point = point.nextSiblingElement("point"))
+	{
+		points.append(QPoint(point.attribute("pointX").toInt(), point.attribute("pointY").toInt()));
+	}
+	pattern.addEdge(edge.attribute("type"), edge.attribute("from")
+					, edge.attribute("to"), edge.attribute("connectionType"), points);
 }

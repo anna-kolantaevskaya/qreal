@@ -523,28 +523,72 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 	QMap<QString, Id> nodes;
 	QPointF size = pattern.size();
 	foreach (GroupNode const &node, pattern.nodes()){
-		Id const element(id.editor(), id.diagram(), node.type, QUuid::createUuid().toString());
-		Id newElemId = mMVIface->graphicalAssistApi()->createElement(parentId
-										, element, isFromLogicalModel
-										, "(" + node.type + ")", position);
-		getNodeById(newElemId)->setPos(position.x()- size.x()/2 + node.position.x()
-									   , position.y() + node.position.y());
-		nodes.insert(node.id, newElemId);
-		elements.append(getNodeById(newElemId));
+		int quan;
+		if (node.parametr){
+			quan = 1;
+		}
+		else{
+			quan = node.quan;
+		}
+		for (int i = 0; i < quan; i++){
+			Id const element(id.editor(), id.diagram(), node.type, QUuid::createUuid().toString());
+			Id newElemId = mMVIface->graphicalAssistApi()->createElement(parentId
+											, element, isFromLogicalModel
+											, "(" + node.type + ")", position);
+			getNodeById(newElemId)->setPos(position.x()- size.x()/2 + node.position.x() + i*(size.x()*3/2)
+										   , position.y() + node.position.y());
+			nodes.insertMulti(node.id, newElemId);
+			elements.append(getNodeById(newElemId));
+		}
 	}
 
 	foreach (GroupEdge const &edge, pattern.edges()){
-		Id const element(id.editor(), id.diagram(), edge.type, QUuid::createUuid().toString());
-		mMVIface->graphicalAssistApi()-> createElement(parentId, element, isFromLogicalModel
-														, "(" + edge.type + ")", QPointF(0,0));
-		mMVIface->graphicalAssistApi()-> setFrom(element, nodes.value(edge.from));
-		mMVIface->graphicalAssistApi()-> setTo(element, nodes.value(edge.to));
-		getNodeById(nodes.value(edge.to))->connectLinksToPorts();
-		reConnectLink(getEdgeById(element));
+		QList<Id> fromId = nodes.values(edge.from);
+		QList<Id> toId = nodes.values(edge.to);
+
+		int quanFrom = 1;
+		int quanTo = 1;
+		if (edge.connectionType == "oneToMany" || edge.connectionType == "manyToMany"){
+			quanTo = toId.count();
+		}
+		if (edge.connectionType == "manyToOne" || edge.connectionType == "manyToMany"){
+			quanFrom = fromId.count();
+		}
+
+		for (int i = 0; i < quanFrom; i++){
+			for (int j = 0; j < quanTo; j++){
+				Id const element(id.editor(), id.diagram(), edge.type, QUuid::createUuid().toString());
+				mMVIface->graphicalAssistApi()-> createElement(parentId, element, isFromLogicalModel
+																, "(" + edge.type + ")", QPointF(0,0));
+				mMVIface->graphicalAssistApi()-> setFrom(element, fromId.at(i));
+				mMVIface->graphicalAssistApi()-> setTo(element, toId.at(j));
+				getNodeById(toId.at(j))->connectLinksToPorts();
+				reConnectLink(getEdgeById(element));
+
+				if(!edge.points.empty()){
+					QPolygon pol = mMVIface->graphicalAssistApi()->configuration(element);
+					pol.insert(1, QPoint(pol.at(0).x() + edge.points.first().x()
+										 , pol.at(0).y() + edge.points.first().y()));
+					mMVIface->graphicalAssistApi()->setConfiguration(element, pol);
+					reConnectLink(getEdgeById(element));
+
+					pol = mMVIface->graphicalAssistApi()->configuration(element);
+					pol.remove(1,1);
+					for (int k = 0; k < edge.points.length(); k++){
+							pol.insert(k + 1, QPoint(pol.at(0).x() + edge.points.at(k).x()
+												 , pol.at(0).y() + edge.points.at(k).y()));
+					}
+					mMVIface->graphicalAssistApi()->setConfiguration(element, pol);
+					reConnectLink(getEdgeById(element));
+				}
+			}
+		}
 	}
 	insertElementIntoEdge(nodes.value(pattern.inNode()), nodes.value(pattern.outNode())
 							, parentId, isFromLogicalModel, position, size, elements);
 }
+
+
 
 void EditorViewScene::insertElementIntoEdge(qReal::Id const &insertedFirstNodeId
 											, qReal::Id const &insertedLastNodeId

@@ -1,23 +1,27 @@
 #include <QtCore/QPointF>
 
 #include "../../qrkernel/ids.h"
-#include "pattern.h"
 #include "editorManager.h"
+#include "pattern.h"
 
 using namespace qReal;
-GroupNode::GroupNode(QString const &type, QString const &id, QPointF const &position)
+GroupNode::GroupNode(QString const &type, QString const &id, QPointF const &position, int quan, bool parametr)
 {
 	this->type = type;
 	this->id = id;
 	this->position = position;
+	this->quan = quan;
+	this->parametr = parametr;
 }
 
-GroupEdge::GroupEdge(QString const &type, QString const &from, QString const &to)
+GroupEdge::GroupEdge(QString const &type, QString const &from, QString const &to
+					 , const QString &connectionType, QList<QPoint> points)
 {
 	this->type = type;
 	this->from = from;
 	this->to = to;
-
+	this->connectionType = connectionType;
+	this->points = points;
 }
 
 Pattern::Pattern()
@@ -64,15 +68,17 @@ QString Pattern::name() const
 	return mGroupName;
 }
 
-void Pattern::addNode(QString const &type, QString const &id, QPointF const &pos)
+void Pattern::addNode(QString const &type, QString const &id, QPointF const &pos
+					  , int quan, bool parametr)
 {
-	GroupNode newNode(type, id, pos);
+	GroupNode newNode(type, id, pos, quan, parametr);
 	mNodes.append(newNode);
 }
 
-void Pattern::addEdge(QString const &type, QString const &from, QString const &to)
+void Pattern::addEdge(QString const &type, QString const &from, QString const &to
+					  , const QString &connectionType, QList<QPoint> points)
 {
-	GroupEdge newEdge(type, from, to);
+	GroupEdge newEdge(type, from, to, connectionType, points);
 	mEdges.append(newEdge);
 }
 
