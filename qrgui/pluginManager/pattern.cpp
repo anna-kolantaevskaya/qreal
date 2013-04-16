@@ -15,13 +15,16 @@ GroupNode::GroupNode(QString const &type, QString const &id, QPointF const &posi
 }
 
 GroupEdge::GroupEdge(QString const &type, QString const &from, QString const &to
-					 , const QString &connectionType, QList<QPoint> points)
+					 , const QString &connectionType, QList<QPoint> points
+					 , QList<QPointF> fromPoints, QList<QPointF> toPoints)
 {
 	this->type = type;
 	this->from = from;
 	this->to = to;
 	this->connectionType = connectionType;
 	this->points = points;
+	this->fromPoints = fromPoints;
+	this->toPoints = toPoints;
 }
 
 Pattern::Pattern()
@@ -76,9 +79,10 @@ void Pattern::addNode(QString const &type, QString const &id, QPointF const &pos
 }
 
 void Pattern::addEdge(QString const &type, QString const &from, QString const &to
-					  , const QString &connectionType, QList<QPoint> points)
+					  , const QString &connectionType, QList<QPoint> points
+					  , QList<QPointF> fromPoints, QList<QPointF> toPoints)
 {
-	GroupEdge newEdge(type, from, to, connectionType, points);
+	GroupEdge newEdge(type, from, to, connectionType, points, fromPoints, toPoints);
 	mEdges.append(newEdge);
 }
 

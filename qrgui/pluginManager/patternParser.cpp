@@ -79,11 +79,23 @@ void PatternParser::parseNode(QDomElement const &node, Pattern &pattern)
 void PatternParser::parseEdge(QDomElement const &edge, Pattern &pattern)
 {
 	QList<QPoint> points;
+	QList<QPointF> fromPoints;
+	QList<QPointF> toPoints;
 	for (QDomElement point = edge.firstChildElement("point"); !point.isNull();
 		 point = point.nextSiblingElement("point"))
 	{
 		points.append(QPoint(point.attribute("pointX").toInt(), point.attribute("pointY").toInt()));
 	}
+	for (QDomElement point = edge.firstChildElement("fromPoint"); !point.isNull();
+		 point = point.nextSiblingElement("fromPoint"))
+	{
+		fromPoints.append(QPoint(point.attribute("pointX").toFloat(), point.attribute("pointY").toFloat()));
+	}
+	for (QDomElement point = edge.firstChildElement("toPoint"); !point.isNull();
+		 point = point.nextSiblingElement("toPoint"))
+	{
+		toPoints.append(QPoint(point.attribute("pointX").toFloat(), point.attribute("pointY").toFloat()));
+	}
 	pattern.addEdge(edge.attribute("type"), edge.attribute("from")
-					, edge.attribute("to"), edge.attribute("connectionType"), points);
+					, edge.attribute("to"), edge.attribute("connectionType"), points, fromPoints, toPoints);
 }

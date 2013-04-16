@@ -82,6 +82,7 @@ public:
 
 	void reConnectLink(EdgeElement * edgeElem);
 	void arrangeNodeLinks(NodeElement* node);
+	void createSrcAndDst(EdgeElement* edge, QPointF start, QPointF end);
 	qreal sign(qreal x);
 
 
