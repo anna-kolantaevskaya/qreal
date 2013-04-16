@@ -641,6 +641,28 @@ void EditorViewScene::createSrcAndDst(EdgeElement* edge, QPointF start, QPointF 
 	edge->placeEndTo(edge->mapFromScene(end));
 	edge->connectToPort();
 	reConnectLink(edge);
+	if(edge->src()){
+		if (!edge->dst()){
+			QPolygon pol = mMVIface->graphicalAssistApi()->configuration(edge->id());
+			pol.insert(1, QPoint(end.x() + pol.at(0).x() - start.x()
+								 , end.y() + pol.at(0).y() - start.y()));
+			pol.remove(2,1);
+			mMVIface->graphicalAssistApi()->setConfiguration(edge->id(), pol);
+
+			edge->connectToPort();
+			reConnectLink(edge);
+		}
+	}
+	else if(edge->dst()){
+		QPolygon pol = mMVIface->graphicalAssistApi()->configuration(edge->id());
+		pol.insert(1, QPoint(start.x() + pol.at(1).x() - end.x()
+							 , start.y() + pol.at(1).y() - end.y()));
+		pol.remove(0,1);
+		mMVIface->graphicalAssistApi()->setConfiguration(edge->id(), pol);
+
+		edge->connectToPort();
+		reConnectLink(edge);
+	}
 }
 
 

@@ -27,16 +27,44 @@
 					</groupEdge>
 				</group>
 				<group name = "atom3_3" inNode = "start" outNode = "end">
-					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
-					<groupEdge type = "DragonFlow" from = "start" connectionType = "oneToOne"> 
-						<toPoint pointX = "0" pointY = "100"> </toPoint>
-						<toPoint pointX = "0" pointY = "100"> </toPoint>
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "1" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" connectionType = "oneToOne">
+						<fromPoint pointX = "200" pointY = "0"> </fromPoint>
+						<toPoint pointX = "200" pointY = "100"> </toPoint>
 					</groupEdge>
 				</group>
 				<group name = "atom3_4" inNode = "start" outNode = "end">
 					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" to = "start" connectionType = "oneToOne"> 
+						<fromPoint pointX = "0" pointY = "100"> </fromPoint>
+					</groupEdge>
+				</group>
+				<group name = "atom3_5" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" connectionType = "oneToOne"> 
+						<fromPoint pointX = "0" pointY = "100"> </fromPoint>
+						<fromPoint pointX = "0" pointY = "200"> </fromPoint>
+						<toPoint pointX = "100" pointY = "100"> </toPoint>
+						<toPoint pointX = "100" pointY = "200"> </toPoint>
+					</groupEdge>
+				</group>
+				<group name = "atom3_6" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" connectionType = "manyToMany"> 
+						<fromPoint pointX = "0" pointY = "100"> </fromPoint>
+						<fromPoint pointX = "0" pointY = "200"> </fromPoint>
+						<toPoint pointX = "100" pointY = "100"> </toPoint>
+						<toPoint pointX = "100" pointY = "200"> </toPoint>
+					</groupEdge>
+				</group>
+				<group name = "atom3_7" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
 					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100" quan = "2" parametrized = "false"> </groupNode>
 					<groupEdge type = "DragonFlow" from = "start" to = "end" connectionType = "manyToMany"> </groupEdge>
+					<groupEdge type = "DragonFlow" from = "end" connectionType = "manyToMany"> 
+						<toPoint pointX = "0" pointY = "200"> </toPoint>
+						<toPoint pointX = "160" pointY = "200"> </toPoint>
+					</groupEdge>
 				</group>
 			</groups>
 		</nonGraphicTypes>
