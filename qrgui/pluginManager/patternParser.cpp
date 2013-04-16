@@ -81,6 +81,7 @@ void PatternParser::parseEdge(QDomElement const &edge, Pattern &pattern)
 	QList<QPoint> points;
 	QList<QPointF> fromPoints;
 	QList<QPointF> toPoints;
+	bool oneToOne = (edge.attribute("connectionType") == "oneToOne") ? true : false;
 	for (QDomElement point = edge.firstChildElement("point"); !point.isNull();
 		 point = point.nextSiblingElement("point"))
 	{
@@ -97,5 +98,5 @@ void PatternParser::parseEdge(QDomElement const &edge, Pattern &pattern)
 		toPoints.append(QPoint(point.attribute("pointX").toFloat(), point.attribute("pointY").toFloat()));
 	}
 	pattern.addEdge(edge.attribute("type"), edge.attribute("from")
-					, edge.attribute("to"), edge.attribute("connectionType"), points, fromPoints, toPoints);
+					, edge.attribute("to"), oneToOne, points, fromPoints, toPoints);
 }

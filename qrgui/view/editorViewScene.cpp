@@ -547,38 +547,61 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 	foreach (GroupEdge const &edge, pattern.edges()){
 		QList<QPointF> posFrom;
 		QList<QPointF> posTo;
-		if(edge.from.isNull() || edge.from.isEmpty()){
-			foreach (QPointF const &point, edge.fromPoints){
-				posFrom.append(QPointF(position.x() + point.x(), position.y() + point.y()));
-			}
-		}
-		else{
-			posFrom = positions.values(edge.from);
-		}
-		if(edge.to.isNull() || edge.to.isEmpty()){
-			if(edge.connectionType == "oneToOne" && posFrom.count() == edge.points.count()){
-				for (int i = 0; i < edge.points.count(); i++){
-					posTo.append(QPointF(posFrom.at(i).x() + edge.toPoints.at(i).x()
-										 , posFrom.at(i).y() + edge.toPoints.at(i).y()));
+		if (edge.connectionType){// if connection type is oneToOne
+			if(!edge.from.isNull() && !edge.from.isEmpty()){
+				posFrom = positions.values(edge.from);
+				if(!edge.to.isNull() && !edge.to.isEmpty()){
+					posTo = positions.values(edge.to);
+				}
+				else{
+					for (int i = 0; i < posFrom.count(); i++){
+						posTo.append(QPointF(posFrom.at(i).x() + edge.toPoints.at(0).x()
+											 , posFrom.at(i).y() + edge.toPoints.at(0).y()));
+					}
 				}
 			}
-			else {
+			else{
+				if(!edge.to.isNull() && !edge.to.isEmpty()){
+					posTo = positions.values(edge.to);
+					for (int i = 0; i < posTo.count(); i++){//it is nesessary to proove if edFromPoint is not empty
+						posFrom.append(QPointF(posTo.at(i).x() + edge.fromPoints.at(0).x()
+											 , posTo.at(i).y() + edge.fromPoints.at(0).y()));
+					}
+				}
+				else{
+					foreach (QPointF const &point, edge.fromPoints){
+						posFrom.append(QPointF(position.x() + point.x(), position.y() + point.y()));
+					}
+					foreach (QPointF const &point, edge.toPoints){
+						posTo.append(QPointF(position.x() + point.x(), position.y() + point.y()));
+					}
+				}
+			}
+			if(posFrom.count() != posTo.count()){}//error
+		}
+		else{//if connection type is eachToEach
+			if(!edge.from.isNull() && !edge.from.isEmpty()){
+				posFrom = positions.values(edge.from);
+			}
+			else{
+				foreach (QPointF const &point, edge.fromPoints){
+					posFrom.append(QPointF(position.x() + point.x(), position.y() + point.y()));
+				}
+			}
+			if(!edge.to.isNull() && !edge.to.isEmpty()){
+				posTo = positions.values(edge.to);
+			}
+			else{
 				foreach (QPointF const &point, edge.toPoints){
 					posTo.append(QPointF(position.x() + point.x(), position.y() + point.y()));
 				}
 			}
-		}
-		else{
-			posTo = positions.values(edge.to);
-		}
 
-		bool oneToOne = (edge.connectionType == "oneToOne" && posTo.count() == posFrom.count())
-				? true : false;
+		}
 
 		for (int i = 0; i < posFrom.count(); i++){
-			int j = (oneToOne) ? i : 0;
-			int quanTo = (oneToOne) ? i + 1 : posTo.count();
-
+			int j = (edge.connectionType) ? i : 0;
+			int quanTo = (edge.connectionType) ? i + 1 : posTo.count();
 			for (j; j < quanTo; j++){
 				Id const element(id.editor(), id.diagram(), edge.type, QUuid::createUuid().toString());
 				mMVIface->graphicalAssistApi()-> createElement(parentId, element, isFromLogicalModel

@@ -15,7 +15,7 @@ GroupNode::GroupNode(QString const &type, QString const &id, QPointF const &posi
 }
 
 GroupEdge::GroupEdge(QString const &type, QString const &from, QString const &to
-					 , const QString &connectionType, QList<QPoint> points
+					 , bool connectionType, QList<QPoint> points
 					 , QList<QPointF> fromPoints, QList<QPointF> toPoints)
 {
 	this->type = type;
@@ -79,7 +79,7 @@ void Pattern::addNode(QString const &type, QString const &id, QPointF const &pos
 }
 
 void Pattern::addEdge(QString const &type, QString const &from, QString const &to
-					  , const QString &connectionType, QList<QPoint> points
+					  , bool connectionType, QList<QPoint> points
 					  , QList<QPointF> fromPoints, QList<QPointF> toPoints)
 {
 	GroupEdge newEdge(type, from, to, connectionType, points, fromPoints, toPoints);

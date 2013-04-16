@@ -22,13 +22,13 @@ public:
 class GroupEdge{
 public:
 	GroupEdge(QString const &type, QString const &from, QString const &to
-			  , const QString &connectionType, QList<QPoint> points
+			  , bool connectionType, QList<QPoint> points
 			  , QList<QPointF> fromPoints, QList<QPointF> toPoints);
 
 	QString type;
 	QString from;
 	QString to;
-	QString connectionType;
+	bool connectionType;
 	QList<QPoint> points;
 	QList<QPointF> fromPoints;
 	QList<QPointF> toPoints;
@@ -47,7 +47,7 @@ public:
 	void addNode(QString const &type, QString const &id, QPointF const &pos
 				 , int quan, bool parametr);
 	void addEdge(QString const &type, QString const &from, QString const &to
-				 , const QString &connectionType, QList<QPoint> points
+				 , bool connectionType, QList<QPoint> points
 				 , QList<QPointF> fromPoints, QList<QPointF> toPoints);
 	QList<GroupNode> nodes() const;
 	QList<GroupEdge> edges() const;
