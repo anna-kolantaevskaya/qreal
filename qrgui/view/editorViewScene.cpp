@@ -527,6 +527,7 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 		int quan;
 		if (node.parametr){
 			quan = 1;
+			this->mainWindow();
 		}
 		else{
 			quan = node.quan;
@@ -674,34 +675,97 @@ void EditorViewScene::insertElementIntoEdge(qReal::Id const &insertedFirstNodeId
 {
 	foreach (QGraphicsItem *item, items(scenePos)) {
 		EdgeElement *edge = dynamic_cast<EdgeElement*>(item);
-		if(edge && edge->isDividable()){// check if item is an edge and the edge is dissectable
+		if(edge && edge->isDividable()){// check if item is an edge and the edge is dividable
 			NodeElement *previouslyConnectedFrom = edge->src();
 			NodeElement *previouslyConnectedTo = edge->dst();
 			if (previouslyConnectedTo && previouslyConnectedFrom) {//check has edge dst
+
+				//counting 	coordinates of link's flexures
+				QList<QPointF> pointsBefore;
+				QList<QPointF> pointsAfter;
+				int cutPoint = 0;
+				QPolygonF polEdge = edge->line();
+				for (int k = 0; k < polEdge.count() - 1; k++){
+					if ((scenePos.x() - polEdge.at(k).x())
+							* (polEdge.at(k + 1).y() - polEdge.at(k).y())
+							== (scenePos.y() - polEdge.at(k).y())
+							* (polEdge.at(k + 1).x() - polEdge.at(k).x())){
+						cutPoint = k;
+						break;
+					}
+					pointsBefore.append(QPointF(polEdge.at(k + 1).x() - polEdge.at(k).x()
+										, polEdge.at(k + 1).y() - polEdge.at(k).y()));
+				}
+				for (int k = polEdge.count() - 1; k > cutPoint + 1; k--){
+					pointsAfter.append(QPointF(polEdge.at(k).x() - polEdge.at(k - 1).x()
+											   , polEdge.at(k).y() - polEdge.at(k - 1).y()));
+				}
+
+
+				//creating new links
 				Id realParentId = (parentId == Id::rootId()) ? mMVIface->rootId() : parentId;
 
+				//making first link
 				Id const newEdge1(edge->id().editor(), edge->id().diagram()
 								  , edge->id().element(), QUuid::createUuid().toString());
 				mMVIface->graphicalAssistApi()-> createElement(realParentId, newEdge1
 															   , isFromLogicalModel, "flow1", scenePos);
-				mMVIface->graphicalAssistApi()->setFrom(newEdge1, previouslyConnectedFrom->id());
-				mMVIface->graphicalAssistApi()->setTo(newEdge1, insertedFirstNodeId);
-				getNodeById(insertedFirstNodeId)->connectLinksToPorts();
+				createSrcAndDst(getEdgeById(newEdge1), previouslyConnectedFrom->pos()
+								, getNodeById(insertedFirstNodeId)->pos());
 
+				//inserting flexures into link
+				if(!pointsBefore.isEmpty()){
+					QPolygon pol = mMVIface->graphicalAssistApi()->configuration(newEdge1);
+
+					pol.insert(1, QPoint(pol.at(0).x() + pointsBefore.at(0).x()
+										 , pol.at(0).y() + pointsBefore.at(0).y()));
+					mMVIface->graphicalAssistApi()->setConfiguration(newEdge1, pol);
+					reConnectLink(getEdgeById(newEdge1));
+
+					pol = mMVIface->graphicalAssistApi()->configuration(newEdge1);
+					pol.remove(1,1);
+
+					for (int k = 0; k < pointsBefore.length() - 1; k++){
+							pol.insert(k + 1, QPoint(pol.at(k).x() + pointsBefore.at(k).x()
+													 , pol.at(k).y() + pointsBefore.at(k).y()));
+					}
+					mMVIface->graphicalAssistApi()->setConfiguration(newEdge1, pol);
+				}
 				reConnectLink(getEdgeById(newEdge1));
 
+
+				//making second link
 				Id const newEdge2(edge->id().editor(), edge->id().diagram()
 								  , edge->id().element(), QUuid::createUuid().toString());
 				mMVIface->graphicalAssistApi()-> createElement(realParentId, newEdge2
 															   , isFromLogicalModel, "flow2", scenePos);
-				mMVIface->graphicalAssistApi()->setFrom(newEdge2, insertedLastNodeId);
-				mMVIface->graphicalAssistApi()->setTo(newEdge2, previouslyConnectedTo->id());
-				previouslyConnectedTo->connectLinksToPorts();
+				createSrcAndDst(getEdgeById(newEdge2), getNodeById(insertedLastNodeId)->pos()
+								, previouslyConnectedTo->pos());
 
+				//inserting flexures into link
+				if(!pointsAfter.isEmpty()){
+					QPolygon pol2 = mMVIface->graphicalAssistApi()->configuration(newEdge2);
+
+					pol2.insert(1, QPoint(pol2.last().x() - pointsAfter.at(0).x()
+										 , pol2.last().y() - pointsAfter.at(0).y()));
+					mMVIface->graphicalAssistApi()->setConfiguration(newEdge2, pol2);
+					reConnectLink(getEdgeById(newEdge2));
+
+					pol2 = mMVIface->graphicalAssistApi()->configuration(newEdge2);
+					pol2.remove(1,1);
+
+
+					for (int k = 0; k < pointsAfter.count(); k++){
+						pol2.insert(1, QPoint(pol2.at(1).x() - pointsAfter.at(k).x()
+												 , pol2.at(1).y() - pointsAfter.at(k).y()));
+					}
+					mMVIface->graphicalAssistApi()->setConfiguration(newEdge2, pol2);
+				}
 				reConnectLink(getEdgeById(newEdge2));
 
-				QPointF fromP = previouslyConnectedFrom->pos();
-				QPointF toP = previouslyConnectedTo->pos();
+				//preparing for movingdown
+				QPointF fromP = polEdge.at(cutPoint); //previouslyConnectedFrom->pos();
+				QPointF toP = polEdge.at(cutPoint + 1); //previouslyConnectedTo->pos();
 				QPointF direction = QPointF(toP.x()- fromP.x(), toP.y()- fromP.y());
 				mainWindow()->deleteElementFromDiagram(edge->id());
 

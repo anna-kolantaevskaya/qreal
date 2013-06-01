@@ -66,6 +66,16 @@
 						<toPoint pointX = "160" pointY = "200"> </toPoint>
 					</groupEdge>
 				</group>
+				<group name = "atom4_1" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100" quan = "2" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" from = "start" to = "end" connectionType = "oneToOne"> </groupEdge>
+				</group>
+				<group name = "atom4_2" inNode = "start" outNode = "end">
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" parametrized = "false"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "end" xPosition = "0" yPosition = "100" quan = "2" parametrized = "false"> </groupNode>
+					<groupEdge type = "DragonFlow" from = "start" to = "end" connectionType = "manyToMany"> </groupEdge>
+				</group>
 			</groups>
 		</nonGraphicTypes>
 		<graphicTypes>
