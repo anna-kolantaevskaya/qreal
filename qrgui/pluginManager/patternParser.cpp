@@ -70,10 +70,12 @@ void PatternParser::parseNode(QDomElement const &node, Pattern &pattern)
 	float x = node.attribute("xPosition").toFloat();
 	float y = node.attribute("yPosition").toFloat();
 	QPointF const pos = QPointF(x,y);
-	int quan = node.attribute("quan").toInt();
 	bool parametr = (node.attribute("parametrized") == "true") ? true : false;
+	int quan = (parametr) ? 1 : node.attribute("quan").toInt();
+	int xShift = (parametr || quan < 2) ? 0 : node.attribute("xShift").toInt();
+	int yShift = (parametr || quan < 2) ? 0 : node.attribute("yShift").toInt();
 	pattern.addNode(node.attribute("type"), node.attribute("name"), pos
-					, quan, parametr);
+					, parametr, quan, xShift, yShift);
 }
 
 void PatternParser::parseEdge(QDomElement const &edge, Pattern &pattern)

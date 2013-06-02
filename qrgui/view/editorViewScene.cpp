@@ -525,20 +525,27 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 	QPointF size = pattern.size();
 	foreach (GroupNode const &node, pattern.nodes()){
 		int quan;
+		int xShift;
+		int yShift;
+		//here is no makng nice window =(
 		if (node.parametr){
 			quan = 1;
+			xShift = 0;
+			yShift = 0;
 			this->mainWindow();
 		}
 		else{
 			quan = node.quan;
+			xShift = node.xShift;
+			yShift = node.yShift;
 		}
 		for (int i = 0; i < quan; i++){
 			Id const element(id.editor(), id.diagram(), node.type, QUuid::createUuid().toString());
 			Id newElemId = mMVIface->graphicalAssistApi()->createElement(parentId
 											, element, isFromLogicalModel
 											, "(" + node.type + ")", position);
-			getNodeById(newElemId)->setPos(position.x()- size.x()/2 + node.position.x() + i*(size.x()*3/2)
-										   , position.y() + node.position.y());
+			getNodeById(newElemId)->setPos(position.x()- size.x()/2 + node.position.x() + i * xShift //(size.x()*3/2)
+										   , position.y() + node.position.y() + i * yShift);
 			nodes.insertMulti(node.id, newElemId);
 			positions.insertMulti(node.id, getNodeById(newElemId)->pos());
 			elements.append(getNodeById(newElemId));
@@ -769,9 +776,10 @@ void EditorViewScene::insertElementIntoEdge(qReal::Id const &insertedFirstNodeId
 				QPointF direction = QPointF(toP.x()- fromP.x(), toP.y()- fromP.y());
 				mainWindow()->deleteElementFromDiagram(edge->id());
 
-				moveDownFromElem(getNodeById(insertedLastNodeId), scenePos, direction, shift, elements);
-				moveDownFromElem(getNodeById(insertedFirstNodeId), scenePos, direction, shift, elements);
-
+				if (polEdge.count() == 2){
+					moveDownFromElem(getNodeById(insertedLastNodeId), scenePos, direction, shift, elements);
+					moveDownFromElem(getNodeById(insertedFirstNodeId), scenePos, direction, shift, elements);
+				}
 				break;
 			}
 		}

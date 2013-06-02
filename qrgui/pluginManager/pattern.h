@@ -10,12 +10,14 @@ class EditorManager;
 class GroupNode{
 public:
 	 GroupNode(QString const &type, QString const &id, const QPointF &position
-			  , int quan, bool parametr);
+			  , bool parametr, int quan, int xShift, int yShift);
 
 	QString type;
 	QString id;
 	QPointF position;
 	int quan;
+	int xShift;
+	int yShift;
 	bool parametr;
 };
 
@@ -45,7 +47,7 @@ public:
 	void setDiagram(QString const &diagram);
 	QString diagram();
 	void addNode(QString const &type, QString const &id, QPointF const &pos
-				 , int quan, bool parametr);
+				 , bool parametr, int quan, int xShift, int yShift);
 	void addEdge(QString const &type, QString const &from, QString const &to
 				 , bool connectionType, QList<QPoint> points
 				 , QList<QPointF> fromPoints, QList<QPointF> toPoints);

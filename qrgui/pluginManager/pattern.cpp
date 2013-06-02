@@ -5,12 +5,14 @@
 #include "pattern.h"
 
 using namespace qReal;
-GroupNode::GroupNode(QString const &type, QString const &id, QPointF const &position, int quan, bool parametr)
+GroupNode::GroupNode(QString const &type, QString const &id, QPointF const &position, bool parametr, int quan, int xShift, int yShift)
 {
 	this->type = type;
 	this->id = id;
 	this->position = position;
 	this->quan = quan;
+	this->xShift = xShift;
+	this->yShift = yShift;
 	this->parametr = parametr;
 }
 
@@ -72,9 +74,9 @@ QString Pattern::name() const
 }
 
 void Pattern::addNode(QString const &type, QString const &id, QPointF const &pos
-					  , int quan, bool parametr)
+					  , bool parametr, int quan, int xShift, int yShift)
 {
-	GroupNode newNode(type, id, pos, quan, parametr);
+	GroupNode newNode(type, id, pos, parametr, quan, xShift, yShift);
 	mNodes.append(newNode);
 }
 
