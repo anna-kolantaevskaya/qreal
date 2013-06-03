@@ -527,7 +527,7 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 		int quan;
 		int xShift;
 		int yShift;
-		//here is no makng nice window =(
+		//here is makng nice window =(
 		if (node.parametr){
 			QList<QString> params = this->mainWindow()->getParametriesFromUser(node.id);
 			quan = params.at(0).toInt();
@@ -544,7 +544,7 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 			Id newElemId = mMVIface->graphicalAssistApi()->createElement(parentId
 											, element, isFromLogicalModel
 											, "(" + node.type + ")", position);
-			getNodeById(newElemId)->setPos(position.x()- size.x()/2 + node.position.x() + i * xShift //(size.x()*3/2)
+			getNodeById(newElemId)->setPos(position.x()- size.x()/2 + node.position.x() + i * xShift
 										   , position.y() + node.position.y() + i * yShift);
 			nodes.insertMulti(node.id, newElemId);
 			positions.insertMulti(node.id, getNodeById(newElemId)->pos());

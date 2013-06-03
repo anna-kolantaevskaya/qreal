@@ -80,8 +80,6 @@ public:
 	QAction *actionPasteCopyOfLogical() const;
 
 	QList<QString> getParametriesFromUser(QString elementName);
-	//void okPush();
-
 
 	virtual void highlight(Id const &graphicalId, bool exclusive = true);
 	virtual void dehighlight(Id const &graphicalId);

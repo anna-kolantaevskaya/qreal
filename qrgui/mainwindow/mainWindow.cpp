@@ -1914,12 +1914,10 @@ QListIterator<EditorView *> MainWindow::openedEditorViews() const
 
 QList<QString> MainWindow::getParametriesFromUser(QString elementName){
 	QList<QString> res;
-
 	createPatternDialog *window = new createPatternDialog(this);
 	window->setElementName(elementName);
 	window->exec();
 	res = window->getFields();
-
 	return res;
 }
 
