@@ -17,6 +17,7 @@ class createPatternDialog : public QDialog
 public:
 	explicit createPatternDialog(QWidget *parent);
 	QList <QString> getFields();
+	void setElementName(QString name);
 
 signals:
 

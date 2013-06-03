@@ -8,7 +8,6 @@ createPatternDialog::createPatternDialog(QWidget *parent) :
 	mUi->setupUi(this);
 	connect(mUi->okButton, SIGNAL(clicked()), this, SLOT(onOk()));
 	setWindowTitle(tr("Creating pattern"));
-	mUi->introLabel->setText("lol");
 }
 
 void createPatternDialog::onOk(){
@@ -16,6 +15,10 @@ void createPatternDialog::onOk(){
 	mXShift = mUi->xShiftLine->text();
 	mYShift = mUi->yShiftLine->text();
 	this->close();
+}
+
+void createPatternDialog::setElementName(QString name){
+	mUi->elementNameLabel->setText(name.operator +=(":"));
 }
 
 QList <QString> createPatternDialog::getFields(){

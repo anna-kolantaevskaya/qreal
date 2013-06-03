@@ -1916,36 +1916,9 @@ QList<QString> MainWindow::getParametriesFromUser(QString elementName){
 	QList<QString> res;
 
 	createPatternDialog *window = new createPatternDialog(this);
+	window->setElementName(elementName);
 	window->exec();
 	res = window->getFields();
-	/*QDialog window;
-	//window.setParent(this);
-	window.setWindowTitle(tr("Create new pattern"));
-	window.setModal(true);
-	QLabel* info = new QLabel("Enter the quantity and shifting of node");
-	QPushButton* okButton = new QPushButton(("Ok"));
-	QPushButton* cancelButton = new QPushButton(tr("Отмена"));
-	connect(okButton, SIGNAL(clicked()), &window, SLOT(okPush()));
-	connect(cancelButton, SIGNAL(clicked()), &window, SLOT(close()));
-	QVBoxLayout *layout1 = new QVBoxLayout;
-	QVBoxLayout *layout2 = new QVBoxLayout;
-	QHBoxLayout *layout3 = new QHBoxLayout;
-
-	layout2->addWidget(info);
-	//layout2->addWidget(sph4Button);
-	//layout2->addWidget(sph5Button);
-
-	layout3->addWidget(okButton);
-	layout3->addWidget(cancelButton);
-
-	layout1->addLayout(layout2);
-	layout1->addLayout(layout3);
-
-	window.setLayout(layout1);
-	window.setFixedHeight(sizeHint().height());
-
-	//owindow.show();
-	window.exec();//*/
 
 	return res;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>211</width>
-    <height>183</height>
+    <width>275</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
-     <width>46</width>
-     <height>13</height>
+     <y>60</y>
+     <width>231</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -33,9 +33,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>80</y>
-     <width>46</width>
-     <height>13</height>
+     <y>90</y>
+     <width>231</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -46,9 +46,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>110</y>
-     <width>46</width>
-     <height>13</height>
+     <y>120</y>
+     <width>221</width>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
@@ -60,7 +60,7 @@
     <rect>
      <x>20</x>
      <y>0</y>
-     <width>161</width>
+     <width>241</width>
      <height>31</height>
     </rect>
    </property>
@@ -71,8 +71,8 @@
   <widget class="QLineEdit" name="xShiftLine">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>80</y>
+     <x>140</x>
+     <y>90</y>
      <width>113</width>
      <height>20</height>
     </rect>
@@ -84,8 +84,8 @@
   <widget class="QLineEdit" name="yShiftLine">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>110</y>
+     <x>140</x>
+     <y>120</y>
      <width>113</width>
      <height>20</height>
     </rect>
@@ -97,8 +97,8 @@
   <widget class="QLineEdit" name="quanLine">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>50</y>
+     <x>140</x>
+     <y>60</y>
      <width>113</width>
      <height>20</height>
     </rect>
@@ -110,7 +110,7 @@
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>170</x>
      <y>150</y>
      <width>75</width>
      <height>23</height>
@@ -118,6 +118,19 @@
    </property>
    <property name="text">
     <string>Ok</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="elementNameLabel">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>30</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>some text</string>
    </property>
   </widget>
  </widget>
