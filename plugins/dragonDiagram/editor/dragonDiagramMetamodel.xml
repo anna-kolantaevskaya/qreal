@@ -34,7 +34,7 @@
 					</groupEdge>
 				</group>
 				<group name = "atom3_4" inNode = "start" outNode = "end">
-					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" xShift = "80" yShift = "0" parametrized = "false"> </groupNode>
+					<groupNode type = "DragonActionNode" name = "start" xPosition = "0" yPosition = "0" quan = "2" xShift = "80" yShift = "0" parametrized = "true"> </groupNode>
 					<groupEdge type = "DragonFlow" to = "start" connectionType = "oneToOne">
 						<fromPoint pointX = "0" pointY = "100"> </fromPoint>
 					</groupEdge>

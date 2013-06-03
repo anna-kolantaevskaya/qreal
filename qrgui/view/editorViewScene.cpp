@@ -529,10 +529,10 @@ void EditorViewScene::createGroupOfElements(qReal::Id const &id, QPointF const &
 		int yShift;
 		//here is no makng nice window =(
 		if (node.parametr){
-			quan = 1;
-			xShift = 0;
-			yShift = 0;
-			this->mainWindow();
+			QList<QString> params = this->mainWindow()->getParametriesFromUser(node.id);
+			quan = params.at(0).toInt();
+			xShift = params.at(1).toInt();
+			yShift = params.at(2).toInt();
 		}
 		else{
 			quan = node.quan;
