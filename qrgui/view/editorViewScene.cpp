@@ -719,12 +719,13 @@ void EditorViewScene::insertElementIntoEdge(qReal::Id const &insertedFirstNodeId
 															   , isFromLogicalModel, "flow1", scenePos);
 				mMVIface->graphicalAssistApi()->setFrom(newEdge1, previouslyConnectedFrom->id());
 								mMVIface->graphicalAssistApi()->setTo(newEdge1, insertedFirstNodeId);
-								getNodeById(insertedFirstNodeId)->connectLinksToPorts();
+				getNodeById(insertedFirstNodeId)->connectLinksToPorts();
+				reConnectLink(getEdgeById(newEdge1));
 //				createSrcAndDst(getEdgeById(newEdge1), previouslyConnectedFrom->pos()
 //								, getNodeById(insertedFirstNodeId)->pos());
 
 				//inserting flexures into link
-				/*if(!pointsBefore.isEmpty()){
+				if(!pointsBefore.isEmpty()){
 					QPolygon pol = mMVIface->graphicalAssistApi()->configuration(newEdge1);
 
 					pol.insert(1, QPoint(pol.at(0).x() + pointsBefore.at(0).x()
@@ -751,10 +752,12 @@ void EditorViewScene::insertElementIntoEdge(qReal::Id const &insertedFirstNodeId
 															   , isFromLogicalModel, "flow2", scenePos);
 				mMVIface->graphicalAssistApi()->setFrom(newEdge2, insertedLastNodeId);
 								mMVIface->graphicalAssistApi()->setTo(newEdge2, previouslyConnectedTo->id());
-								previouslyConnectedTo->connectLinksToPorts();
+				previouslyConnectedTo->connectLinksToPorts();
 			//	createSrcAndDst(getEdgeById(newEdge2), getNodeById(insertedLastNodeId)->pos()
 			//					, previouslyConnectedTo->pos());
 
+
+				reConnectLink(getEdgeById(newEdge2));
 				//inserting flexures into link
 				if(!pointsAfter.isEmpty()){
 					QPolygon pol2 = mMVIface->graphicalAssistApi()->configuration(newEdge2);
