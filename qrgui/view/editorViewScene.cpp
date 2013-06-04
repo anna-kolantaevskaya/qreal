@@ -691,7 +691,9 @@ void EditorViewScene::insertElementIntoEdge(qReal::Id const &insertedFirstNodeId
 				QList<QPointF> pointsBefore;
 				QList<QPointF> pointsAfter;
 				int cutPoint = 0;
-				QPolygonF polEdge = edge->line();
+				reConnectLink(edge);
+				QPolygon polEdge = mMVIface->graphicalAssistApi()->configuration(edge->id());
+				//QPolygonF polEdge = edge->line();
 				for (int k = 0; k < polEdge.count() - 1; k++){
 					if ((scenePos.x() - polEdge.at(k).x())
 							* (polEdge.at(k + 1).y() - polEdge.at(k).y())
